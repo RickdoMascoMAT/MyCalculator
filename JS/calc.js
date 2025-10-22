@@ -1,5 +1,13 @@
 let result = 0;
 
+let allbtns = document.querySelectorAll("button");
+
+allbtns.forEach((btn) => {
+    console.log("Button clicked:", btn);
+    btn.addEventListener("click", (event) => {
+}
+);
+
 function add(a, b) {
     return a + b;
 }
