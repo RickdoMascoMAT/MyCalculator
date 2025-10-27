@@ -1,0 +1,85 @@
+/* Simple, modern styles for the calculator */
+:root{
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --accent: #3b82f6; /* blue-500 */
+  --accent-600: #2563eb;
+  --muted: #6b7280;
+  --danger: #dc2626;
+  --shadow: 0 6px 18px rgba(15,23,42,0.08);
+  --radius: 12px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg, var(--bg), #eef2ff 60%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px;
+  color:#0f172a;
+}
+
+.calculator{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:20px 22px;
+}
+
+.calc-header h1{
+  margin:0 0 8px 0;
+  font-size:20px;
+  letter-spacing:0.2px;
+}
+
+.calc-form{display:block}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;margin-bottom:14px}
+.inputs label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+.inputs input[type="number"]{
+  width:100%;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #e6edf3;
+  background:linear-gradient(180deg,#fff,#fbfdff);
+  font-size:16px;
+}
+
+.ops{display:flex;gap:10px;justify-content:space-between;margin-bottom:14px}
+.op{
+  flex:1;
+  border:0;
+  background:linear-gradient(180deg,var(--accent),var(--accent-600));
+  color:white;
+  font-weight:600;
+  font-size:18px;
+  padding:10px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  box-shadow:0 6px 12px rgba(59,130,246,0.18);
+  transition:transform .08s ease, box-shadow .12s ease, opacity .12s;
+}
+.op:active{transform:translateY(1px)}
+.op[aria-pressed="true"],.op:hover{opacity:.95}
+
+.result{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #e6edf3;
+  font-weight:700;
+  font-size:18px;
+  text-align:right;
+  background:#fafcff;
+}
+
+.calc-footer{margin-top:12px;text-align:center;color:var(--muted);font-size:13px}
+
+@media (max-width:420px){
+  .inputs{grid-template-columns:1fr;margin-bottom:12px}
+  .op{font-size:16px;padding:9px}
+}

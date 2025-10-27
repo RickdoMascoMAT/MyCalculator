@@ -4,18 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <input type="number" name="val1" id="val1">
-    <input type="number" name="val2" id="val2">
-</n>
-    <button class="op" id="1">+</button>
-    <button class="op" id="2">-</button>
-    <button class="op" id="3">*</button>
-    <button class="op" id="4">/</button>
+    <main class="calculator">
+        <header class="calc-header">
+            <h1>Simple Calculator</h1>
+        </header>
 
-    <div id="result" style="margin-top:12px; font-weight:600;"></div>
+        <form class="calc-form" onsubmit="return false;" aria-label="Calculator">
+            <div class="inputs">
+                <label for="val1">Value 1</label>
+                <input type="number" name="val1" id="val1" placeholder="0" />
+
+                <label for="val2">Value 2</label>
+                <input type="number" name="val2" id="val2" placeholder="0" />
+            </div>
+
+            <div class="ops" role="group" aria-label="Operations">
+                <button class="op" id="1" type="button">+</button>
+                <button class="op" id="2" type="button">−</button>
+                <button class="op" id="3" type="button">×</button>
+                <button class="op" id="4" type="button">÷</button>
+            </div>
+
+            <div id="result" class="result" aria-live="polite">&nbsp;</div>
+        </form>
+        <footer class="calc-footer">
+            <small>Enter numbers and click an operation</small>
+        </footer>
+    </main>
+
+    <script src="JS/calc.js"></script>
 </body>
-</n><script src="JS/calc.js"></script>
-</n></html>
 </html>
