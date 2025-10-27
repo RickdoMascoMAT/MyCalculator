@@ -56,6 +56,10 @@ allbtns.forEach((btn) => {
             }
 
             updateResult(res);
+            // add successful calculation to log
+            if (res !== null) {
+                addLogEntry(n1, n2, op, opSymbol(op), res);
+            }
         } catch (err) {
             console.error('Unexpected error during calculation', err);
             updateResult('Unexpected error');
@@ -207,3 +211,106 @@ function updateResult(res) {
         out.style.color = '';
     }
 }
+
+/** Calculation log (UI + persistence) ****************************************/
+const LOG_KEY = 'calcLog:v1';
+let calcLog = [];
+
+/**
+ * Format an entry object into a DOM node and append to the list.
+ * @param {{time:string, a:number, b:number, op:string, symbol:string, result:number}} entry
+ */
+function renderLogEntry(entry) {
+    const ul = document.getElementById('calc-log');
+    if (!ul) return;
+
+    const li = document.createElement('li');
+    li.className = 'log-entry';
+
+    const left = document.createElement('div');
+    left.className = 'entry-left';
+
+    const time = document.createElement('div');
+    time.className = 'entry-time';
+    time.textContent = entry.time;
+
+    const expr = document.createElement('div');
+    expr.className = 'entry-expr';
+    expr.textContent = `${entry.a} ${entry.symbol} ${entry.b} = ${entry.result}`;
+
+    left.appendChild(time);
+    left.appendChild(expr);
+
+    li.appendChild(left);
+
+    // append to the top
+    ul.insertBefore(li, ul.firstChild);
+}
+
+/** Load log from localStorage and render it */
+function loadLog() {
+    try {
+        const raw = localStorage.getItem(LOG_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data)) return;
+        calcLog = data;
+        // render entries (oldest last) so we insert in order
+        calcLog.forEach((e) => renderLogEntry(e));
+    } catch (err) {
+        console.error('Failed to load calc log', err);
+    }
+}
+
+/** Save current log to localStorage */
+function saveLog() {
+    try {
+        localStorage.setItem(LOG_KEY, JSON.stringify(calcLog));
+    } catch (err) {
+        console.error('Failed to save calc log', err);
+    }
+}
+
+/** Add a new entry (also persists) */
+function addLogEntry(a, b, op, symbol, result) {
+    const entry = {
+        time: new Date().toLocaleString(),
+        a,
+        b,
+        op,
+        symbol,
+        result,
+    };
+    calcLog.push(entry);
+    saveLog();
+    renderLogEntry(entry);
+}
+
+/** Clear log both in memory, UI and storage */
+function clearLog() {
+    calcLog = [];
+    try { localStorage.removeItem(LOG_KEY); } catch (e) {}
+    const ul = document.getElementById('calc-log');
+    if (ul) ul.innerHTML = '';
+}
+
+// wire clear button
+const clearBtn = document.getElementById('clear-log');
+if (clearBtn) clearBtn.addEventListener('click', () => clearLog());
+
+// map operator id to symbol for display
+function opSymbol(op) {
+    switch (op) {
+        case '1': return '+';
+        case '2': return '-';
+        case '3': return '×';
+        case '4': return '÷';
+        default: return op;
+    }
+}
+
+// initialize log on load
+// load log immediately (script is included at end of body so DOM elements exist)
+loadLog();
+
+/** End calculation log *******************************************************/

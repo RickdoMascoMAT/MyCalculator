@@ -98,3 +98,13 @@ body{
   .inputs{grid-template-columns:1fr;margin-bottom:12px}
   .op{font-size:16px;padding:9px}
 }
+/* history / log styles */
+.history{margin-top:16px}
+.history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.history-header h2{font-size:16px;margin:0}
+.history-actions .btn-clear{background:transparent;border:1px solid #e6edf3;padding:6px 10px;border-radius:8px;cursor:pointer}
+.calc-log{list-style:none;padding:8px;max-height:180px;overflow:auto;margin:0;border-radius:8px;border:1px solid #eef2ff;background:linear-gradient(180deg,#fff,#fbfdff)}
+.calc-log .log-entry{display:flex;justify-content:space-between;padding:8px 10px;border-bottom:1px solid #f1f5f9;font-size:14px}
+.calc-log .log-entry:last-child{border-bottom:0}
+.log-entry .entry-time{color:var(--muted);font-size:12px;margin-right:8px}
+.log-entry .entry-expr{font-weight:600}

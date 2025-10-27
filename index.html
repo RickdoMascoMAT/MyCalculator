@@ -30,6 +30,19 @@
 
             <div id="result" class="result" aria-live="polite">&nbsp;</div>
         </form>
+
+        <section class="history">
+            <div class="history-header">
+                <h2>History</h2>
+                <div class="history-actions">
+                    <button id="clear-log" type="button" class="btn-clear">Clear</button>
+                </div>
+            </div>
+            <ul id="calc-log" class="calc-log" aria-live="polite" aria-label="Calculation history">
+                <!-- log entries appended here -->
+            </ul>
+        </section>
+
         <footer class="calc-footer">
             <small>Enter numbers and click an operation</small>
         </footer>
