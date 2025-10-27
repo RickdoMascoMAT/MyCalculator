@@ -50,6 +50,21 @@ body{
   font-size:16px;
 }
 
+/* visual state for invalid inputs */
+.input-error{
+  border-color: var(--danger) !important;
+  box-shadow: 0 6px 18px rgba(220,38,38,0.12);
+  animation: shake .28s ease-in-out;
+}
+
+@keyframes shake{
+  0%{transform: translateX(0)}
+  25%{transform: translateX(-6px)}
+  50%{transform: translateX(6px)}
+  75%{transform: translateX(-4px)}
+  100%{transform: translateX(0)}
+}
+
 .ops{display:flex;gap:10px;justify-content:space-between;margin-bottom:14px}
 .op{
   flex:1;

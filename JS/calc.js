@@ -24,17 +24,84 @@ allbtns.forEach((btn) => {
         const val2El = document.getElementById('val2');
         const v1 = parseFloat(val1El.value);
         const v2 = parseFloat(val2El.value);
+        // clear previous visual errors
+        val1El.classList.remove('input-error');
+        val2El.classList.remove('input-error');
 
-        if (Number.isNaN(v1) || Number.isNaN(v2)) {
-            console.error('Both inputs must be numbers.');
-            updateResult('Error: invalid input');
+        // validate inputs
+        const { valid, v1: n1, v2: n2, message, invalidEl } = validateInputs(val1El, val2El);
+        if (!valid) {
+            console.error(message);
+            if (invalidEl) {
+                invalidEl.classList.add('input-error');
+                invalidEl.focus();
+            }
+            updateResult(message);
             return;
         }
 
-        const res = calculate(op, v1, v2);
-        updateResult(res);
+        // perform calculation with safe error handling
+        try {
+            const res = calculate(op, n1, n2);
+
+            // handle division-by-zero explicitly (divide returns null)
+            if (res === null) {
+                if (op === '4' && n2 === 0) {
+                    val2El.classList.add('input-error');
+                    updateResult('Error: division by zero');
+                } else {
+                    updateResult(null); // generic error
+                }
+                return;
+            }
+
+            updateResult(res);
+        } catch (err) {
+            console.error('Unexpected error during calculation', err);
+            updateResult('Unexpected error');
+        }
     });
 });
+
+/**
+ * Validate and parse two input elements.
+ * @param {HTMLInputElement} el1
+ * @param {HTMLInputElement} el2
+ * @returns {{valid:boolean, v1:number|null, v2:number|null, message:string, invalidEl:HTMLElement|null}}
+ */
+function validateInputs(el1, el2) {
+    if (!el1 || !el2) {
+        return { valid: false, v1: null, v2: null, message: 'Internal error: inputs not found', invalidEl: null };
+    }
+
+    const s1 = el1.value;
+    const s2 = el2.value;
+
+    if (s1.trim() === '') {
+        return { valid: false, v1: null, v2: null, message: 'Please enter the first number', invalidEl: el1 };
+    }
+    if (s2.trim() === '') {
+        return { valid: false, v1: null, v2: null, message: 'Please enter the second number', invalidEl: el2 };
+    }
+
+    const n1 = parseFloat(s1);
+    const n2 = parseFloat(s2);
+
+    if (!Number.isFinite(n1)) {
+        return { valid: false, v1: null, v2: null, message: 'First value is not a valid number', invalidEl: el1 };
+    }
+    if (!Number.isFinite(n2)) {
+        return { valid: false, v1: null, v2: null, message: 'Second value is not a valid number', invalidEl: el2 };
+    }
+
+    return { valid: true, v1: n1, v2: n2, message: '', invalidEl: null };
+}
+
+// clear error class on input
+const val1El = document.getElementById('val1');
+const val2El = document.getElementById('val2');
+if (val1El) val1El.addEventListener('input', () => val1El.classList.remove('input-error'));
+if (val2El) val2El.addEventListener('input', () => val2El.classList.remove('input-error'));
 
 
 /**
