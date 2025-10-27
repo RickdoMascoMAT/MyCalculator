@@ -226,6 +226,7 @@ function renderLogEntry(entry) {
 
     const li = document.createElement('li');
     li.className = 'log-entry';
+    if (entry.id) li.dataset.id = entry.id;
 
     const left = document.createElement('div');
     left.className = 'entry-left';
@@ -243,6 +244,26 @@ function renderLogEntry(entry) {
 
     li.appendChild(left);
 
+    // actions (Load / Delete)
+    const actions = document.createElement('div');
+    actions.className = 'entry-actions';
+
+    const loadBtn = document.createElement('button');
+    loadBtn.type = 'button';
+    loadBtn.className = 'btn-log-load';
+    loadBtn.textContent = 'Load';
+    loadBtn.addEventListener('click', () => loadEntryById(entry.id));
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'btn-log-delete';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', () => deleteLogEntry(entry.id, li));
+
+    actions.appendChild(loadBtn);
+    actions.appendChild(delBtn);
+    li.appendChild(actions);
+
     // append to the top
     ul.insertBefore(li, ul.firstChild);
 }
@@ -254,7 +275,8 @@ function loadLog() {
         if (!raw) return;
         const data = JSON.parse(raw);
         if (!Array.isArray(data)) return;
-        calcLog = data;
+        // ensure each entry has an id (backwards-compatibility)
+        calcLog = data.map((e, i) => ({ id: e.id || (Date.now() + i), ...e }));
         // render entries (oldest last) so we insert in order
         calcLog.forEach((e) => renderLogEntry(e));
     } catch (err) {
@@ -274,6 +296,7 @@ function saveLog() {
 /** Add a new entry (also persists) */
 function addLogEntry(a, b, op, symbol, result) {
     const entry = {
+        id: Date.now(),
         time: new Date().toLocaleString(),
         a,
         b,
@@ -297,6 +320,43 @@ function clearLog() {
 // wire clear button
 const clearBtn = document.getElementById('clear-log');
 if (clearBtn) clearBtn.addEventListener('click', () => clearLog());
+
+/** Delete a single entry by id and remove its DOM node (if provided) */
+function deleteLogEntry(id, liNode) {
+    calcLog = calcLog.filter((e) => e.id !== id);
+    saveLog();
+    if (liNode && liNode.parentNode) liNode.parentNode.removeChild(liNode);
+    else {
+        const ul = document.getElementById('calc-log');
+        if (!ul) return;
+        const el = ul.querySelector(`li[data-id="${id}"]`);
+        if (el) el.remove();
+    }
+}
+
+/** Load an entry into the inputs and perform the calculation (does not re-log)
+ * @param {number} id
+ */
+function loadEntryById(id) {
+    const entry = calcLog.find((e) => e.id === id);
+    if (!entry) return;
+    loadEntry(entry);
+}
+
+function loadEntry(entry) {
+    const aEl = document.getElementById('val1');
+    const bEl = document.getElementById('val2');
+    if (!aEl || !bEl) return;
+    aEl.value = entry.a;
+    bEl.value = entry.b;
+    // clear any error styles
+    aEl.classList.remove('input-error');
+    bEl.classList.remove('input-error');
+
+    // perform calculation but do not add a new log entry (user re-used history)
+    const res = calculate(entry.op, entry.a, entry.b);
+    updateResult(res);
+}
 
 // map operator id to symbol for display
 function opSymbol(op) {

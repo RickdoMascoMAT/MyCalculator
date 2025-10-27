@@ -108,3 +108,9 @@ body{
 .calc-log .log-entry:last-child{border-bottom:0}
 .log-entry .entry-time{color:var(--muted);font-size:12px;margin-right:8px}
 .log-entry .entry-expr{font-weight:600}
+
+/* log entry actions */
+.entry-actions{display:flex;gap:8px;align-items:center}
+.entry-actions button{border:0;padding:6px 8px;border-radius:6px;cursor:pointer;font-size:13px}
+.btn-log-load{background:transparent;border:1px solid #e6edf3}
+.btn-log-delete{background:var(--danger);color:white}
