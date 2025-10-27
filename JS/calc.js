@@ -1,12 +1,27 @@
 let result = 0;
 
-let allbtns = document.querySelectorAll("button");
+// select only operator buttons
+const allbtns = document.querySelectorAll('.op');
 
 allbtns.forEach((btn) => {
-    console.log("Button clicked:", btn);
-    btn.addEventListener("click", (event) => {
-}
-);
+    btn.addEventListener('click', (event) => {
+        const op = event.currentTarget.id;
+        const val1El = document.getElementById('val1');
+        const val2El = document.getElementById('val2');
+        const v1 = parseFloat(val1El.value);
+        const v2 = parseFloat(val2El.value);
+
+        if (Number.isNaN(v1) || Number.isNaN(v2)) {
+            console.error('Both inputs must be numbers.');
+            updateResult('Error: invalid input');
+            return;
+        }
+
+        const res = calculate(op, v1, v2);
+        updateResult(res);
+    });
+});
+
 
 function add(a, b) {
     return a + b;
@@ -47,4 +62,21 @@ function calculate(op, val1, val2) {
             return null;
     }
     return result;
+}
+
+// update the UI result element
+function updateResult(res) {
+    const out = document.getElementById('result');
+    if (!out) {
+        console.log('Result:', res);
+        return;
+    }
+
+    if (res === null) {
+        out.textContent = 'Error';
+        out.style.color = 'crimson';
+    } else {
+        out.textContent = String(res);
+        out.style.color = '';
+    }
 }
