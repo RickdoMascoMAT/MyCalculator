@@ -1,0 +1,18 @@
+{
+  "name": "mycalculator",
+  "version": "0.0.1",
+  "description": "Proget Calc (short for Calculator BTW)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "calculator"
+  ],
+  "author": "Rick_doMasco",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}
