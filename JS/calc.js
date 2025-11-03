@@ -1,10 +1,4 @@
-/**
- * Current calculation result (holds last computed value).
- * Type: number | null
- * - number: a valid numeric result
- * - null: indicates an error (for example division by zero)
- */
-let result = 0;
+import { calculate } from './math/calculate.js';
 
 /**
  * Attach click handlers to operator buttons (buttons must have class="op").
@@ -107,85 +101,6 @@ const val2El = document.getElementById('val2');
 if (val1El) val1El.addEventListener('input', () => val1El.classList.remove('input-error'));
 if (val2El) val2El.addEventListener('input', () => val2El.classList.remove('input-error'));
 
-
-/**
- * Add two numbers.
- * @param {number} a - First addend.
- * @param {number} b - Second addend.
- * @returns {number} Sum of `a` and `b`.
- */
-function add(a, b) {
-    return a + b;
-}
-
-/**
- * Subtract two numbers.
- * @param {number} a - Minuend.
- * @param {number} b - Subtrahend.
- * @returns {number} Result of `a - b`.
- */
-function subtract(a, b) {
-    return a - b;
-}
-
-/**
- * Multiply two numbers.
- * @param {number} a - First factor.
- * @param {number} b - Second factor.
- * @returns {number} Product of `a` and `b`.
- */
-function multiply(a, b) {
-    return a * b;
-}
-
-/**
- * Divide two numbers.
- * @param {number} a - Dividend.
- * @param {number} b - Divisor.
- * @returns {number|null} Quotient `a / b`, or `null` when division by zero is attempted.
- * Side-effect: logs an error to console if `b === 0`.
- */
-function divide(a, b) {
-    if (b === 0) {
-        console.error('Division by zero is not allowed.');
-        return null;
-    }
-    return a / b;
-}
-
-/**
- * Compute a result based on an operator id and two numeric values.
- * Operator ids are strings matching the `id` attribute of the operator buttons:
- * - '1' => add
- * - '2' => subtract
- * - '3' => multiply
- * - '4' => divide
- * @param {string} op - Operator id (see mapping above).
- * @param {number} val1 - First numeric operand.
- * @param {number} val2 - Second numeric operand.
- * @returns {number|null} Computed result, or `null` when an error occurs (invalid op or division by zero).
- * Side-effects: updates module-level `result` variable and logs errors to console.
- */
-function calculate(op, val1, val2) {
-    switch (op) {
-        case '1':
-            result = add(val1, val2);
-            break;
-        case '2':
-            result = subtract(val1, val2);
-            break;
-        case '3':
-            result = multiply(val1, val2);
-            break;
-        case '4':
-            result = divide(val1, val2);
-            break;
-        default:
-            console.error('Invalid operation');
-            return null;
-    }
-    return result;
-}
 
 /**
  * Render the result in the page element with id `result`.
